@@ -42,7 +42,7 @@ class FlatMap<S, T> extends StreamEventTransformer {
           result.close();
           subscription.cancel();
         } else {
-          isCompleted = true;
+          isComplete = true;
         }
       }
     );
