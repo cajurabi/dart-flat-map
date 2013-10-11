@@ -13,10 +13,11 @@ class FlatMap<S, T> extends StreamEventTransformer {
     var result        = new StreamController();
     var subscriptions = new CompositeSubscription();
     var isComplete    = false;
-    var subscription  = stream.listen(
-      (S data) {
-        var subscription = null;
-        subscription = this._flatMapper(data).listen(
+    var subscription  = stream.listen(null);
+
+    subscription.onData((S data) {
+        var mySubscription = null;
+        mySubscription = this._flatMapper(data).listen(
           (T data) {
             result.add(data);
           },
@@ -25,19 +26,21 @@ class FlatMap<S, T> extends StreamEventTransformer {
             subscriptions.cancel();
           },
           onDone: () {
-            subscriptions.remove(subscription);
+            subscriptions.remove(mySubscription);
             if (isComplete && subscriptions.toList().length == 1) {
               result.close();
             }
           }
         );
-        subscriptions.add(subscription);
-      },
-      onError: (error) {
+        subscriptions.add(mySubscription);
+      });
+
+    subscription.onError((error) {
         result.addError(error);
         subscriptions.cancel();
-      },
-      onDone: () {
+      });
+
+    subscription.onDone(() {
         if (subscriptions.toList().length == 1) {
           result.close();
           subscription.cancel();
@@ -46,6 +49,7 @@ class FlatMap<S, T> extends StreamEventTransformer {
         }
       }
     );
+
     subscriptions.add(subscription);
     return result.stream;
   }

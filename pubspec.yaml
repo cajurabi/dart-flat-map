@@ -1,8 +1,7 @@
 name: flat_map
-version: 0.1.0
-homepage: https://github.com/JosephMoniz/dart-flat-map
-description: >
-  A Stream transformer for performing flat mapping on async streams
+version: 0.1.1
 author: Joseph Moniz <joseph.moniz@gmail.com>
+description: A Stream transformer for performing flat mapping on async streams
+homepage: https://github.com/JosephMoniz/dart-flat-map
 dependencies:
   composite_subscription: '>=0.1.0 <0.2.0'
